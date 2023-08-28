@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using ToDo.Models;
+
 namespace ToDo
 {
     public class Program
@@ -8,6 +11,10 @@ namespace ToDo
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddDbContext<ToDoDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("TodoDbContext"));
+            });
 
             var app = builder.Build();
 
