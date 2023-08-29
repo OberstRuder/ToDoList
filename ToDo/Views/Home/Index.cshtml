@@ -3,6 +3,13 @@
     <div class="row">
         <div class="col-md-2">
             <form asp-action="Filter" method="post">
+            <div class="mb-3">
+                <label class="form-label">User</label>
+                <select name="filter" class="form-select"
+                        asp-items="@(new SelectList(ViewBag.Users, "UserId", "Name", ViewBag.Filters.UserId))">
+                    <option value="all">All</option>
+                </select>
+                </div>
                 <div class="mb-3">
                     <label class="form-label">Category</label>
                     <select name="filter" class="form-select"
@@ -34,6 +41,7 @@
                     <thread>
                         <tr>
                             <th>Description</th>
+                            <th>User</th>
                             <th>Category</th>
                             <th>Due Date</th>
                             <th>Status</th>
@@ -46,6 +54,7 @@
                         string overdue = task.Overdue ? "bg-warning" : "";
                         <tr>
                             <td>@task.Description</td>
+                            <td>@task.User.Name</td>
                             <td>@task.Category.Name</td>
                             <td class="@overdue">@task.DueDate?.ToShortDateString()</td>
                             <td class="@overdue">@task.Status.Name</td>
@@ -61,7 +70,7 @@
                 </tbody>
                 </table>
             </form>
-            <form asp-acton="DeleteComplete" metod="post" asp-route-id="@ViewBag.Filters.FilterString">
+            <form asp-action="DeleteComplete" metod="post" asp-route-id="@ViewBag.Filters.FilterString">
                 <a asp-action="Add" class="btn btn-primary">Add new task</a>
                 <button type="submit" class="btn btn-primary">Delete Completed</button>
             </form>

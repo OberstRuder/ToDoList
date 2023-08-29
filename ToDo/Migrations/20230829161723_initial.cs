@@ -38,6 +38,18 @@ namespace ToDo.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.UserId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ToDos",
                 columns: table => new
                 {
@@ -46,6 +58,7 @@ namespace ToDo.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CategoryId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     StatusId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -62,6 +75,12 @@ namespace ToDo.Migrations
                         column: x => x.StatusId,
                         principalTable: "Statuses",
                         principalColumn: "StatusId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ToDos_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -85,6 +104,16 @@ namespace ToDo.Migrations
                     { "open", "Open" }
                 });
 
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "UserId", "Name" },
+                values: new object[,]
+                {
+                    { "harry", "Harry" },
+                    { "jack", "Jack" },
+                    { "william", "William" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_ToDos_CategoryId",
                 table: "ToDos",
@@ -94,6 +123,11 @@ namespace ToDo.Migrations
                 name: "IX_ToDos_StatusId",
                 table: "ToDos",
                 column: "StatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ToDos_UserId",
+                table: "ToDos",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -107,6 +141,9 @@ namespace ToDo.Migrations
 
             migrationBuilder.DropTable(
                 name: "Statuses");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

@@ -12,7 +12,7 @@ using ToDo.Models;
 namespace ToDo.Migrations
 {
     [DbContext(typeof(ToDoDbContext))]
-    [Migration("20230829061617_initial")]
+    [Migration("20230829161723_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -111,13 +111,50 @@ namespace ToDo.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("StatusId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("ToDos");
+                });
+
+            modelBuilder.Entity("ToDo.Models.User", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "jack",
+                            Name = "Jack"
+                        },
+                        new
+                        {
+                            UserId = "harry",
+                            Name = "Harry"
+                        },
+                        new
+                        {
+                            UserId = "william",
+                            Name = "William"
+                        });
                 });
 
             modelBuilder.Entity("ToDo.Models.Todo", b =>
@@ -134,9 +171,17 @@ namespace ToDo.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ToDo.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Category");
 
                     b.Navigation("Status");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

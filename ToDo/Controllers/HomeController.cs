@@ -19,11 +19,13 @@ namespace ToDo.Controllers
             ViewBag.Filters = filters;
             ViewBag.Categories = context.Categories.ToList();
             ViewBag.Statuses = context.Statuses.ToList();
+            ViewBag.Users = context.Users.ToList();
             ViewBag.DueFilters = Filters.DueFilterValues;
 
             IQueryable<Models.Todo> query = context.ToDos
                 .Include(t => t.Category)
-                .Include(t => t.Status);
+                .Include(t => t.Status)
+                .Include(t => t.User);
 
             if (filters.HasCategory) 
             { 
@@ -52,6 +54,11 @@ namespace ToDo.Controllers
                 }
             }
 
+            if (filters.HasUser)
+            {
+                query = query.Where(t => t.UserId == filters.UserId);
+            }
+
             var tasks = query.OrderBy(t => t.DueDate).ToList();
 
             return View(tasks);
@@ -62,6 +69,7 @@ namespace ToDo.Controllers
         {
             ViewBag.Categories = context.Categories.ToList();
             ViewBag.Statuses = context.Statuses.ToList();
+            ViewBag.Users = context.Users.ToList();
             var task = new Todo { StatusId = "open" };
             return View(task);
         }
@@ -79,6 +87,7 @@ namespace ToDo.Controllers
             {
                 ViewBag.Categories = context.Categories.ToList();
                 ViewBag.Statuses = context.Statuses.ToList();
+                ViewBag.Users = context.Users.ToList();
                 return View(task);
             }
         }

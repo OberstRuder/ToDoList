@@ -11,9 +11,16 @@
     </div>
 
     <div class="mb-3">
+        <label asp-for="UserId" class="form-label">User</label>
+        <select asp-for="UserId" class="form-select" asp-items="@(new SelectList(ViewBag.Users, "UserId", "Name"))">
+           <option value="">Select a user</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
         <label asp-for="CategoryId" class="form-label">Category</label>
         <select asp-for="CategoryId" class="form-select" asp-items="@(new SelectList(ViewBag.Categories, "CategoryId", "Name"))">
-           <option value="">Select a category</option>
+            <option value="">Select a category</option>
         </select>
     </div>
 

@@ -19,6 +19,12 @@ namespace ToDo.Models
         [ValidateNever]
         public Category Category { get; set; } = null!;
 
+        [Required(ErrorMessage = "Please select a user")]
+        public string UserId { get; set; } = string.Empty;
+
+        [ValidateNever]
+        public User User { get; set; } = null!;
+
         [Required(ErrorMessage ="Select a status")]
         public string StatusId { get; set; } = string.Empty;
 
